@@ -1,25 +1,22 @@
 version: "3.9"
 
 services:
-
+  java_db:
+      container_name: java_db
+      image: mariadb:latest
+      ports:
+        - 3306:3306
+      environment:
+        MYSQL_ROOT_PASSWORD: dorapwd
+        MYSQL_DATABASE: parcial01
   java_app:
     container_name: java_app
+    restart: on-failure
     image: crud-java:1.0
     build: .
     ports:
       - 8080:8080
     environment:
-      - java_db=jdbc:postgresql://127.0.0.1:5432/postgres
+      - java_db=jdbc:mariadb://java_db:3306/parcial01
     depends_on:
       - java_db
-  java_db:
-    container_name: java_db
-    image: postgres:latest
-    ports:
-      - 5433:5432
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-
-
